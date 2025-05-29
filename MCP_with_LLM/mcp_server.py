@@ -1,4 +1,3 @@
-import os
 import json
 from mcp.server.fastmcp import FastMCP
 
@@ -7,7 +6,6 @@ mcp = FastMCP(
     host="0.0.0.0",
     port=8585
 )
-
 
 @mcp.tool()
 def retrieve_knowledge(self, kb_path: str = "data/knowledge.json") -> str:

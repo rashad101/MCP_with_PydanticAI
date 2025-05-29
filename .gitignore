@@ -1,3 +1,4 @@
-.env
+MCP_with_LLM/.env
 __pycache__/
 agent/
+.idea/*
