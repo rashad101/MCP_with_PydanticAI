@@ -1,4 +1,6 @@
 MCP_with_LLM/.env
+MCP_and_PydanticAI/.env
+MCP_and_PydanticAI/.logfire/*
 __pycache__/
 agent/
 .idea/*
