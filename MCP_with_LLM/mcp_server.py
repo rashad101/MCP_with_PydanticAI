@@ -1,14 +1,17 @@
 import json
 from mcp.server.fastmcp import FastMCP
 
+# for SSE transport the server needs to be running for stdio transport host and port are not  required
 mcp = FastMCP(
     name="Internal Knowledge",
-    host="0.0.0.0",
-    port=8585
+    host="0.0.0.0",  # used for SSE transport
+    port=8585  # used for SSE transport
 )
 
+
 @mcp.tool(
-    description="The knowledge_retriever tool retrieves internal knowledge that includes a set of frequently asked questions about various sports."
+    description="The knowledge_retriever tool retrieves internal knowledge that includes a set of frequently asked "
+                "questions about various sports."
 )
 def knowledge_retriever(kb_path: str = "data/knowledge.json") -> str:
     knowledge = "Retrieved knowledge: \n\n"

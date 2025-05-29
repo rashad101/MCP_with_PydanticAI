@@ -68,6 +68,7 @@ class MCPOpenAIClient:
     async def process_query(self, query: str) -> str:
         tools = await self.get_mcp_tools()
 
+        # defining system prompt
         prompt = f"""Answer the user query. Fist look for the answer into the internal knowledge. If you cannot \
                      find the answer in the internal knowledge then generate the answer from your own pre-trained \
                      knowledge\n\n user query: {query}"""
@@ -86,7 +87,6 @@ class MCPOpenAIClient:
 
         system_response = response.choices[0].message
 
-
         # if LLM suggests tool calls then perform the tool calling
         # otherwise return the response as the final system response
         if system_response.tool_calls:
@@ -98,14 +98,14 @@ class MCPOpenAIClient:
                 system_response
             ]
 
-            # execute the tool call
+            # execute the tool call for each tools
             for tool_call in system_response.tool_calls:
                 tool_call_result = await self.session.call_tool(
                     tool_call.function.name,
                     arguments=json.loads(tool_call.function.arguments)
                 )
 
-                # appending tools result to the final message
+                # appending tool call result to the final message
                 final_messages.append({
                     "role": "tool",
                     "tool_call_id": tool_call.id,
@@ -134,9 +134,20 @@ async def main():
     await client.load_server()
 
     query = "Which sport is the king of sports ?"
+    print("User query: ", query)
     response = await client.process_query(query)
-
     print("System response: ", response)
+
+    while True:
+        user_query = input("Type your question: ")
+        if user_query=="q":
+            print("Exiting the system...")
+            break
+
+        print("User query: ", user_query)
+        response = await client.process_query(user_query)
+
+        print("System response: ", response)
 
     await client.cleanup()
 
