@@ -7,14 +7,16 @@ mcp = FastMCP(
     port=8585
 )
 
-@mcp.tool()
-def retrieve_knowledge(self, kb_path: str = "data/knowledge.json") -> str:
-    knowledge = "Retrieved knowledge: \n"
-    data = json.load(self.kb_path)
+@mcp.tool(
+    description="The knowledge_retriever tool retrieves internal knowledge that includes a set of frequently asked questions about various sports."
+)
+def knowledge_retriever(kb_path: str = "data/knowledge.json") -> str:
+    knowledge = "Retrieved knowledge: \n\n"
+    data = json.load(open(kb_path))
 
     for i, k_item in enumerate(data):
-        knowledge += k_item[f"Q{i + 1}: {k_item['Q']}"]
-        knowledge += k_item[f"A{i + 1}: {k_item['A']}"]
+        knowledge += f"Q{i + 1}: {k_item['Q']}\n"
+        knowledge += f"A{i + 1}: {k_item['A']}\n\n"
 
     return knowledge
 

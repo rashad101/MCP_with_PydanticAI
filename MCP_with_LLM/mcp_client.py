@@ -68,12 +68,16 @@ class MCPOpenAIClient:
     async def process_query(self, query: str) -> str:
         tools = await self.get_mcp_tools()
 
+        prompt = f"""Answer the user query. Fist look for the answer into the internal knowledge. If you cannot \
+                     find the answer in the internal knowledge then generate the answer from your own pre-trained \
+                     knowledge\n\n user query: {query}"""
+
         response = await self.openai_client.chat.completions.create(
             model=self.model,
             messages=[
                 {
                     "role": "user",
-                    "content": query
+                    "content": prompt
                 }
             ],
             tools=tools,
@@ -89,7 +93,7 @@ class MCPOpenAIClient:
             final_messages = [
                 {
                     "role": "user",
-                    "content": query
+                    "content": prompt
                 },
                 system_response
             ]
